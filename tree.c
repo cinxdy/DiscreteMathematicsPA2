@@ -1,5 +1,4 @@
 // tree.c
-
 // tree.h
 
 #ifndef TREE_H
@@ -25,19 +24,17 @@ struct Tree{
 } ;
 
 struct Tree* newTree(int sign, int prop);
-int parseToTree(struct Tree* t);
+struct Tree* parseToTree(struct Tree* t);
+//int checkSyntax();
 void printTree(struct Tree* t);
 
 #if 1
 int main(){
-    struct Tree* root = (struct Tree*) malloc(sizeof(struct Tree));
+    struct Tree* root = NULL;
 
-    if(parseToTree(root)){
-        printf("success!\n");
-    }
-    else{
+    root = parseToTree(root);
+    if(root == NULL)
         printf("error!\n");
-    }
 
     DPrintf(printf("root=%p \n",root););
 
@@ -62,57 +59,85 @@ struct Tree* newTree(int sign, int prop){
     
 }
 
-int parseToTree(struct Tree* t){ // close the bracket or not  true: close; false: still open;
+struct Tree* parseToTree(struct Tree* t){ // close the bracket or not  true: close; false: still open;
     DPrintf(printf("< parseToTree t=%p\n",t));
     char temp;
     char ss[MAX_STR];
     int sign=0;
     int prop=0;
+    
+    scanf("%s",ss);
+    DPrintf(printf("-parseToTree temp=%c, ss=%s\n", temp, ss););
+
+    if(ss[0] == '('){
+
+        if(!strcmp(ss,"(and")) sign = 1;
+        else if(!strcmp(ss,"(or"))  sign = 2;
+        else if(!strcmp(ss,"(not")) sign = 3;
+
+        t = newTree(sign, prop);
+        t->left = parseToTree(t->left);
+        if(sign != 3)
+            t->right = parseToTree(t->right);
+    }
+    else{
+
+        //if(ss[strlen(ss)-1]!=')') 
+        //    return NULL;
+
+        sign = 0;
+        prop = ss[1] - '0';
+        t = newTree(sign, prop);
+
+    }
+
+    DPrintf(printf("> parseToTree t=%p\n",t));
+    
+    return t;
+}
+/*
+int checkSyntax(){
+    DPrintf(printf("< checkSyntax\n"));
+
     int success;
+    char temp;
+    char ss[MAX_STR];
 
     scanf("%c",&temp);
-    DPrintf(printf("-parseToTree temp=%c", temp););
+    scanf("%s",ss);
+    DPrintf(printf("- checkSyntax ss=%s\n",ss));
+
     if(temp == '('){
-        scanf("%s",ss);
-
-        if(!strcmp(ss,"and")) sign = 1;
-        else if(!strcmp(ss,"or"))  sign = 2;
-        else if(!strcmp(ss,"not")) sign = 3;
-
-        t = newTree(sign, prop);
-        success = parseToTree(t->left);
-        success = parseToTree(t->right);
-        DPrintf(printf("< parseToTree t=%p\n",t));
+        
+        success = checkSyntax();
+        success = checkSyntax();
+        
         return success;
     }
-    else{
-        scanf("%s",ss);
-        sign = 0;
-        prop = ss[1] - '\0';
-        t = newTree(sign, prop);
-    }
-    
-    DPrintf(printf("< parseToTree t=%p\n",t));
-    if(ss[strlen(ss)-1]==')') return 1;
-    else return 0;
-}
+
+    if(ss[strlen(ss)-1]==')') success = 1;
+    else success = 0;
+
+    DPrintf(printf("> checkSyntax success=%d\n",success));
+    return success;
+}*/
 
 void printTree(struct Tree* t){
+    if(t == NULL) return ;
     DPrintf(printf("< printTree tree=%p, tree->left=%p, tree->right=%p\n", t, t->left, t->right););
 
-    if(t == NULL) return ;
+    
 
     if(t->sign == 0)
-        printf(" %d", t->prop);
+        printf(" a%d", t->prop);
     else{
         if(t->sign == 1)
-            printf("(and");
+            printf(" (and");
         else if(t->sign == 2)
-            printf("(or");
+            printf(" (or");
         else if(t->sign == 3)
-            printf("(not");
+            printf(" (not");
     }
-
 
     printTree(t->left);
     printTree(t->right);
