@@ -9,9 +9,9 @@
 #include <stdlib.h>
 
 #define MAX_STR 128
-#ifdef DEBUG 
+#ifdef DEBUG
     #define DPrintf(f) f;
-#else 
+#else
     #define DPrintf(f) ;
 #endif
 
@@ -22,6 +22,9 @@ struct Tree{
     struct Tree *right;
 } ;
 
-void initTree(struct Tree *t);
-void insertTree(struct Tree* t, int sign, int prop);
+struct Tree* newTree(int sign, int prop);
+struct Tree* parseToTree(struct Tree* t);
+//int checkSyntax();
 void printTree(struct Tree* t);
+struct Tree* not(struct Tree* t);
+struct Tree* NNF(struct Tree* t);
