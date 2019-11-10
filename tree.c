@@ -161,8 +161,15 @@ struct Tree* NNF(struct Tree* t){
 
 struct Tree* distribute(struct Tree* t){
     DPrintf(printf("< distribute tree=%p\n",t););
+    struct Tree* p = t;
 
-
+    if(t->left->sign == 0 && t->right->sign == 0){
+        return t;
+    }
+    else if(t->left->sign == 0){
+        t->right->left = t;
+        t->right->right = t;
+    }
     
     return t;
     DPrintf(printf("> distribute tree=%p\n",t););
