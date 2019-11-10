@@ -6,6 +6,8 @@
 int main(){
     struct Tree* root = NULL;
 
+    printf("input == ");
+    
     root = parseToTree(root);
     if(root == NULL)
         printf("error!\n");
@@ -14,9 +16,17 @@ int main(){
     printTree(root);
     printf("\n");
 
-    root = NNF(root);
+    
     printf("NNF == ");
+    root = NNF(root);
     printTree(root);
+    printf("\n");
+
+    
+    printf("CNF == ");
+    root = CNF(root);
+    printTree(root);
+
     printf("\n\n\n");
 
     DPrintf(printf("root=%p \n",root););
@@ -161,14 +171,44 @@ struct Tree* NNF(struct Tree* t){
 
 struct Tree* distribute(struct Tree* t){
     DPrintf(printf("< distribute tree=%p\n",t););
-    struct Tree* p = t;
+    struct Tree* p = NULL;
+    struct Tree* pp = NULL;
+
 
     if(t->left->sign == 0 && t->right->sign == 0){
         return t;
     }
-    else if(t->left->sign == 0){
-        t->right->left = t;
-        t->right->right = t;
+    else if(t->right->sign != 0){
+        p = t->right;
+        t->right = NULL;
+
+        pp = p->left;
+        p->left = copyTree(t);
+        p->left->right = pp;
+
+        pp = p->right;
+        p->right = copyTree(t);
+        p->right->right = pp;
+
+        deleteAll(t);
+
+        return p;
+    }
+    else if(t->left->sign != 0){
+        p = t->left;
+        t->left = NULL;
+
+        pp = p->right;
+        p->right = copyTree(t);
+        p->right->left = pp;
+
+        pp = p->left;
+        p->left = copyTree(t);
+        p->left->right = pp;
+
+        deleteAll(t);
+
+        return p;
     }
     
     return t;
@@ -178,14 +218,14 @@ struct Tree* distribute(struct Tree* t){
 struct Tree* CNF(struct Tree* t){
     DPrintf(printf("< CNF tree=%p\n",t););
 
-    if(t == NULL){
+    if(t == NULL || t->sign == 0){
         //printf("error! nullptr!\n");
         return t;
     }
 
     if(t->sign == 2){ // meet 'or'
         t = distribute(t);
-        t = CNF(t);
+        //t = CNF(t);
     }
     else if(t->sign==1){ // if 'and'
         t->left = CNF(t->left);
@@ -195,4 +235,21 @@ struct Tree* CNF(struct Tree* t){
     return t;
 
     DPrintf(printf("> CNF tree=%p\n",t););
+}
+
+struct Tree* copyTree(struct Tree* t){
+    if(t==NULL) return t;
+
+    struct Tree* nt = newTree(t->sign,t->prop);
+    nt->left = copyTree(t->left);
+    nt->right = copyTree(t->right);
+    return nt;
+}
+
+void deleteAll(struct Tree* t){
+    if(t == NULL) return ;
+
+    deleteAll(t->left);
+    deleteAll(t->right);
+    free(t);
 }

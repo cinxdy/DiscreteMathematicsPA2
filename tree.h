@@ -30,3 +30,5 @@ struct Tree* doNot(struct Tree* t);
 struct Tree* NNF(struct Tree* t);
 struct Tree* distribute(struct Tree* t);
 struct Tree* CNF(struct Tree* t);
+struct Tree* copyTree(struct Tree* t);
+void deleteAll(struct Tree* t);
