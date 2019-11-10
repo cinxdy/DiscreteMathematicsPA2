@@ -26,5 +26,7 @@ struct Tree* newTree(int sign, int prop);
 struct Tree* parseToTree(struct Tree* t);
 //int checkSyntax();
 void printTree(struct Tree* t);
-struct Tree* not(struct Tree* t);
+struct Tree* doNot(struct Tree* t);
 struct Tree* NNF(struct Tree* t);
+struct Tree* distribute(struct Tree* t);
+struct Tree* CNF(struct Tree* t);
