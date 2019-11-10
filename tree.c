@@ -178,7 +178,7 @@ struct Tree* distribute(struct Tree* t){
     if(t->left->sign == 0 && t->right->sign == 0){
         return t;
     }
-    else if(t->right->sign != 0){
+    else if(t->left->sign == 0){
         p = t->right;
         t->right = NULL;
 
@@ -193,8 +193,8 @@ struct Tree* distribute(struct Tree* t){
         deleteAll(t);
 
         return p;
-    }
-    else if(t->left->sign != 0){
+    } ///// PROBLEM!!! /////
+    else if(t->right->sign == 0){
         p = t->left;
         t->left = NULL;
 
