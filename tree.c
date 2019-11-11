@@ -193,18 +193,18 @@ struct Tree* distribute(struct Tree* t){
         deleteAll(t);
 
         return p;
-    } ///// PROBLEM!!! /////
-    else if(t->right->sign == 0){
+    }
+    else {
         p = t->left;
         t->left = NULL;
+
+        pp = p->left;
+        p->left = copyTree(t);
+        p->left->left = pp;
 
         pp = p->right;
         p->right = copyTree(t);
         p->right->left = pp;
-
-        pp = p->left;
-        p->left = copyTree(t);
-        p->left->right = pp;
 
         deleteAll(t);
 
