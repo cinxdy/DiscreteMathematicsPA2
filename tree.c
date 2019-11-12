@@ -1,37 +1,47 @@
 // tree.c
 
+/* RED POINT
+* 여러 파라미터일 때 elements 여러개
+* checkCNF 구현한 뒤 CNF에 넣기
+* checkSyntax 구현 // 괄호 문제가 아니라 아예 다른 인풋일 때에도 가능한 함수
+* README.md 만들기
+*/
+
 #include "tree.h"
+
+int check, open, close;
 
 #if 1
 int main(){
     struct Tree* root = NULL;
 
+    // read input
     printf("input == ");
-    
     root = parseToTree(root);
-    if(root == NULL)
-        printf("error!\n");
+    if(root == NULL) printf("error!\n");
 
+    // print read
     printf("read == ");
     printTree(root);
     printf("\n");
 
-    
+    // do NNF and print
     printf("NNF == ");
     root = NNF(root);
     printTree(root);
     printf("\n");
 
-    
+    // do CNF and print
     printf("CNF == ");
     root = CNF(root);
     printTree(root);
 
     printf("\n\n\n");
 
-    DPrintf(printf("root=%p \n",root););
+    // change form of the output
+    printAnswer(root);
 
-    //DPrintf(printf("root=%p, root->left=%p, root->right=%p \n",root,root->left,root->right););
+    DPrintf(printf("> main root=%p \n",root););
 }
 #endif
 
@@ -57,78 +67,45 @@ struct Tree* parseToTree(struct Tree* t){ // close the bracket or demorgan  true
     int prop=0;
     
     scanf("%s",ss);
-    DPrintf(printf("-parseToTree temp=%c, ss=%s\n", temp, ss););
+    //checkSyntax(ss);
+    DPrintf(printf("- parseToTree temp=%c, ss=%s\n", temp, ss););
 
     if(ss[0] == '('){
 
-        if(!strcmp(ss,"(and")) sign = 1;
-        else if(!strcmp(ss,"(or"))  sign = 2;
-        else if(!strcmp(ss,"(not")) sign = 3;
+        if(!strcmp(ss,"(and")) sign = _AND;
+        else if(!strcmp(ss,"(or"))  sign = _OR;
+        else if(!strcmp(ss,"(not")) sign = _NOT;
 
         t = newTree(sign, prop);
         t->left = parseToTree(t->left);
-        if(sign != 3)
+        if(sign != _NOT)
             t->right = parseToTree(t->right);
     }
     else{
-
-        //if(ss[strlen(ss)-1]!=')') 
-        //    return NULL;
-
-        sign = 0;
+        sign = _NUM;
         prop = ss[1] - '0';
         t = newTree(sign, prop);
-
     }
 
     DPrintf(printf("> parseToTree t=%p\n",t));
-    
     return t;
 }
 
-/*
-int checkSyntax(){
-    DPrintf(printf("< checkSyntax\n"));
-
-    int success;
-    char temp;
-    char ss[MAX_STR];
-
-    scanf("%c",&temp);
-    scanf("%s",ss);
-    DPrintf(printf("- checkSyntax ss=%s\n",ss));
-
-    if(temp == '('){
-        
-        success = checkSyntax();
-        success = checkSyntax();
-        
-        return success;
-    }
-
-    if(ss[strlen(ss)-1]==')') success = 1;
-    else success = 0;
-
-    DPrintf(printf("> checkSyntax success=%d\n",success));
-    return success;
-}*/
-
 void printTree(struct Tree* t){
+    DPrintf(printf("< printTree tree=%p\n",t););
     if(t == NULL) return ;
-    DPrintf(printf("< printTree tree=%p, tree->left=%p, tree->right=%p\n", t, t->left, t->right););
 
     switch(t->sign){
-        case 0: printf(" a%d", t->prop); break;
-        case 1: printf(" (and"); break;
-        case 2: printf(" (or");  break;
-        case 3: printf(" (not"); break;
+        case _NUM: printf(" a%d", t->prop); break;
+        case _AND: printf(" (and"); break;
+        case _OR: printf(" (or");  break;
+        case _NOT: printf(" (not"); break;
     }
-
 
     printTree(t->left);
     printTree(t->right);
 
-    if(t->sign !=0)
+    if(t->sign !=_NUM)
         printf(")");
 
     DPrintf(printf("> printTree tree=%p\n",t););
@@ -137,16 +114,16 @@ void printTree(struct Tree* t){
 struct Tree* demorgan(struct Tree* t){
     DPrintf(printf("< demorgan tree=%p\n",t););
 
-    if(t->sign == 0) t->prop *= -1;
-    else if(t->sign == 1 || t->sign == 2) {
+    if(t->sign == _NUM) t->prop *= -1;
+    else if(t->sign == _AND || t->sign == _OR) {
         t->sign = 3- t->sign;
         t->left = demorgan(t->left);
         t->right = demorgan(t->right);
     }
-    else if(t->sign == 3) t = t->left;
+    else if(t->sign == _NOT) t = t->left;
     
-    return t;
     DPrintf(printf("> demorgan tree=%p\n",t););
+    return t;
 }
 
 struct Tree* NNF(struct Tree* t){
@@ -157,10 +134,10 @@ struct Tree* NNF(struct Tree* t){
         return t;
     }
 
-    if(t->sign == 3){ // meet 'demorgan'
+    if(t->sign == _NOT){ // meet 'demorgan'
         t = demorgan(t->left);
     }
-    else if(t->sign==1 || t->sign==2){ // and || or
+    else if(t->sign==_AND || t->sign==_OR){ // and || or
         t->left = NNF(t->left);
         t->right = NNF(t->right);
     }
@@ -174,11 +151,11 @@ struct Tree* distribute(struct Tree* t){
     struct Tree* p = NULL;
     struct Tree* pp = NULL;
 
-
-    if(t->left->sign == 0 && t->right->sign == 0){
+    if((t->left->sign == _NUM && t->right->sign == _NUM) || t == NULL){
+        DPrintf(printf("> distribute tree t=%p\n",t););
         return t;
     }
-    else if(t->left->sign == 0){
+    else if(t->left->sign == _NUM){
         p = t->right;
         t->right = NULL;
 
@@ -191,8 +168,6 @@ struct Tree* distribute(struct Tree* t){
         p->right->right = pp;
 
         deleteAll(t);
-
-        return p;
     }
     else {
         p = t->left;
@@ -206,50 +181,112 @@ struct Tree* distribute(struct Tree* t){
         p->right = copyTree(t);
         p->right->left = pp;
 
-        deleteAll(t);
-
-        return p;
+        deleteAll(t); 
     }
     
-    return t;
-    DPrintf(printf("> distribute tree=%p\n",t););
+    DPrintf(printf("> distribute tree p=%p\n",p););
+    return p;
 }
 
 struct Tree* CNF(struct Tree* t){
     DPrintf(printf("< CNF tree=%p\n",t););
 
-    if(t == NULL || t->sign == 0){
+    if(t == NULL || t->sign == _NUM){
         //printf("error! nullptr!\n");
         return t;
     }
 
-    if(t->sign == 2){ // meet 'or'
+    if(t->sign == _OR){ // meet 'or'
         t = distribute(t);
-        //t = CNF(t);
+        t->left = CNF(t->left);
+        t->right = CNF(t->right);
     }
-    else if(t->sign==1){ // if 'and'
+    else if(t->sign==_AND){ // if 'and'
         t->left = CNF(t->left);
         t->right = CNF(t->right);
     }
 
-    return t;
-
     DPrintf(printf("> CNF tree=%p\n",t););
+    return t;
 }
 
+/*
+int checkCNF(struct Tree* t){
+    DPrintf(printf("< checkCNF tree=%p\n",t););
+    int check;
+
+    if(t == NULL || t->sign == 2) check = 0;
+    else {
+        check = 1;
+    }
+    
+    DPrintf(printf("> checkCNF tree=%p\n",t););
+}
+*/
+
 struct Tree* copyTree(struct Tree* t){
+    DPrintf(printf("< copyTree tree=%p\n",t););
+
     if(t==NULL) return t;
 
-    struct Tree* nt = newTree(t->sign,t->prop);
+    struct Tree* nt = newTree(t->sign,t->prop); // new tree
     nt->left = copyTree(t->left);
     nt->right = copyTree(t->right);
+
+    DPrintf(printf("> copyTree tree=%p\n",nt););
     return nt;
 }
 
 void deleteAll(struct Tree* t){
+    DPrintf(printf("< deleteTree tree=%p\n",t););
+
     if(t == NULL) return ;
 
     deleteAll(t->left);
     deleteAll(t->right);
     free(t);
+
+    DPrintf(printf("> copyTree\n"););
+}
+
+/////ADDED/////
+
+void printAnswer(struct Tree*t){
+    DPrintf(printf("< printAnswer tree=%p",t););
+
+    if(t == NULL) return ;
+    
+    switch(t->sign){
+        case _NUM: printf("%d ", t->prop);
+                printAnswer(t->left);
+                printAnswer(t->right);
+                break;
+        case _AND: printAnswer(t->left);
+                printf("\n");
+                printAnswer(t->right);
+                break;
+        case _OR: printAnswer(t->left); 
+                printf(" ");
+                printAnswer(t->right);
+                break;
+        case _NOT: printf("-");
+                printAnswer(t->left);
+                printAnswer(t->right);
+                break;
+        default: break;
+    }
+
+    DPrintf(printf("> printAnswer tree=%p",t););
+}
+
+int checkSyntax(char ss[]){
+    for(int i=0 ; i<strlen(ss) ; i++) {
+        if(ss[i]=='(')  open++;
+        if(ss[i]==')')  close++;
+        if(!(ss[i]==' ' || ss[i]=='\0' || (48<=ss[i] && ss[i]<=57) || ss[i]==40 || ss[i]==41 || ss[i]==97 || ss[i]==100 || ss[i]==110 || ss[i]==111 || ss[i]==116 || ss[i]==114)){
+            check=1;
+            // printf("%c\n", ss[i]);
+        }
+    }
+    return check;
 }
