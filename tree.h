@@ -15,6 +15,7 @@
     #define DPrintf(f) ;
 #endif
 
+// Tree with only two pointers (left and right)
 struct Tree{
     int sign; // 0 prop; 1 and; 2 or; 3 not;
     int prop;
@@ -22,6 +23,7 @@ struct Tree{
     struct Tree *right;
 };
 
+// for the elements of Tree, sign
 enum SIGN { _NUM, _AND, _OR, _NOT };
 
 // make the new node of the tree which has sign, and prop
@@ -30,13 +32,37 @@ enum SIGN { _NUM, _AND, _OR, _NOT };
 // the prop has a number of propositions (e.g : a1 has prop 1, a2 has prop 2)
 struct Tree* newTree(int sign, int prop);
 
+// get the input text, and translate the text to tree nodes.
 struct Tree* parseToTree(struct Tree* t);
+
+// print tree started from t
 void printTree(struct Tree* t);
+
+// change the node. 
+// if the node is a statement node, change 'and' to 'or', 'or' to 'and', 'not' to 'no not'
+// else if the node is a atomic proposition, change 'a1' to 'a-1'
 struct Tree* doNot(struct Tree* t);
+
+// make the tree to be NNF.
 struct Tree* NNF(struct Tree* t);
+
+// if the nodes is not 'and', execute distribution.
 struct Tree* distribute(struct Tree* t);
+
+// make the tree to be CNF.
 struct Tree* CNF(struct Tree* t);
+
+// make a new tree which has the nodes same as tree t.
+// and return the new tree.
 struct Tree* copyTree(struct Tree* t);
+
+// delete all nodes of the tree t (all nodes connected to the node t)
 void deleteAll(struct Tree* t);
+
+// print the tree with Answer form. (you'd know what I mean)
 void printAnswer(struct Tree*t);
+
+// check the syntax.
+// if the syntax is right, return 1
+// else return 0
 int checkSyntax(char ss[]);
