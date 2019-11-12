@@ -6,7 +6,7 @@
 ```
 gcc -o p2_5.out -include tree.h tree.c  
 ```
-In the Debug mode, you can see which function are executed.  
+In the Debug mode, you can see which functions are executed.  
 ```
 gcc -DDEBUG -o p2_5.out -include tree.h tree.c  
 ```
