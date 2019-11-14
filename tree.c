@@ -1,15 +1,12 @@
 // tree.c
 
-/* RED POINT
-* 여러 파라미터일 때 elements 여러개
+/*
+* 여러 파라미터일 때 elements 여러 개 받기
 * checkCNF 구현한 뒤 CNF에 넣기
 * checkSyntax 구현 // 괄호 문제가 아니라 아예 다른 인풋일 때에도 가능한 함수
-* README.md 만들기
 */
 
 #include "tree.h"
-
-int check, open, close;
 
 #if 1
 int main(){
@@ -67,7 +64,6 @@ struct Tree* parseToTree(struct Tree* t){ // close the bracket or demorgan  true
     int prop=0;
     
     scanf("%s",ss);
-    //checkSyntax(ss);
     DPrintf(printf("- parseToTree temp=%c, ss=%s\n", temp, ss););
 
     if(ss[0] == '('){
@@ -210,20 +206,6 @@ struct Tree* CNF(struct Tree* t){
     return t;
 }
 
-/*
-int checkCNF(struct Tree* t){
-    DPrintf(printf("< checkCNF tree=%p\n",t););
-    int check;
-
-    if(t == NULL || t->sign == 2) check = 0;
-    else {
-        check = 1;
-    }
-    
-    DPrintf(printf("> checkCNF tree=%p\n",t););
-}
-*/
-
 struct Tree* copyTree(struct Tree* t){
     DPrintf(printf("< copyTree tree=%p\n",t););
 
@@ -248,8 +230,6 @@ void deleteAll(struct Tree* t){
 
     DPrintf(printf("> copyTree\n"););
 }
-
-/////ADDED/////
 
 void printAnswer(struct Tree*t){
     DPrintf(printf("< printAnswer tree=%p",t););
@@ -277,16 +257,4 @@ void printAnswer(struct Tree*t){
     }
 
     DPrintf(printf("> printAnswer tree=%p",t););
-}
-
-int checkSyntax(char ss[]){
-    for(int i=0 ; i<strlen(ss) ; i++) {
-        if(ss[i]=='(')  open++;
-        if(ss[i]==')')  close++;
-        if(!(ss[i]==' ' || ss[i]=='\0' || (48<=ss[i] && ss[i]<=57) || ss[i]==40 || ss[i]==41 || ss[i]==97 || ss[i]==100 || ss[i]==110 || ss[i]==111 || ss[i]==116 || ss[i]==114)){
-            check=1;
-            // printf("%c\n", ss[i]);
-        }
-    }
-    return check;
 }

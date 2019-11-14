@@ -61,8 +61,3 @@ void deleteAll(struct Tree* t);
 
 // print the tree with Answer form. (you'd know what I mean)
 void printAnswer(struct Tree*t);
-
-// check the syntax.
-// if the syntax is right, return 1
-// else return 0
-int checkSyntax(char ss[]);
