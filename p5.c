@@ -6,7 +6,7 @@
 * checkSyntax 구현 // 괄호 문제가 아니라 아예 다른 인풋일 때에도 가능한 함수
 */
 
-#include "tree.h"
+#include "p5.h"
 
 #if 1
 int main(){
