@@ -1,3 +1,50 @@
+# Programming Assignment 2
+
+
+# Fractal Drawing
+This is an introduction of how to use the p1, p2 and p3.html.
+p1, p2 and p3.html draw a fractal shape according to your input that is depth.
+
+## Chapter 1. Input a depth value
+If you want to show fractal shape, then Input a value in text box.<br />
+There is no limit to input value, but it is recommended that you enter a number less than 15 as possible.<br />
+Because if value is greater than 15, probably site will pause. (This is the limit of recursion)
+
+## Chapter 2. Click a draw button
+Enter the value in the text box and click the 'draw' button.
+Then, the fractal shape will appears on the canvas.
+#### <Fractal 1>
+<img src="images/fractal1_3.jpg" alt="Image Error" width="200">depth = 3<img src="images/fractal1_5.jpg" alt="Image Error" width="200">depth = 5<img src="images/fractal1_6.jpg" alt="Image Error" width="200">depth = 6
+
+#### <Fractal 2>
+<img src="images/fractal2_3.PNG" alt="Image Error" width="200">depth = 3<img src="images/fractal2_5.PNG" alt="Image Error" width="200">depth = 5<img src="images/fractal2_7.PNG" alt="Image Error" width="200">depth = 7
+
+#### <Fractal 3>
+<img src="images/fractal3_5.PNG" alt="Image Error" width="200">depth = 5<img src="images/fractal3_8.PNG" alt="Image Error" width="200">depth = 8<img src="images/fractal3_10.jpg" alt="Image Error" width="200">depth = 10
+
+# Polygon with Triangulation
+This is an introduction of how to use the p4.html.
+p4.html draw a polygon that is simple polygon with triangulation.
+
+## Chapter 1. Input a sentence formed series of points.
+Our assumption is Input values are continuous points just linked point to point.<br />
+Therefore, You must enter continuous coordinates clockwise or counterclockwise.<br />
+Otherwise, an error message will appears because the line that connected the points is not a polygon.
+#### Available form
+> `(1,1),(2,3),(4,5),(10,4) ...`<br>
+> `1,1,2,3,4,5,10,4 ...`<br>
+> `1,1,2,3,(4,5),10,4 ...`
+#### Unavailable form
+If `blank space` is in input text, then an error message will appears that "Invaild form".<br>
+> `,,,,,,1,1,2,3,(4,5),10,4 ...`<br>
+> `1,1 2,3,,, (4,5) 10,4 ...`
+
+## Chapter 2. Click a draw button
+Enter the value in the text box and click the 'draw' button.
+Then, the polygon with triagulation will appears on the canvas.
+#### <Example 1>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;<Example 2>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;<Example 3>
+<img src="images/example1.PNG" alt="Image Error" width="200">&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;<img src="images/example2.PNG" alt="Image Error" width="200">&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;<img src="images/example3.PNG" alt="Image Error" width="200">
+
 # CNF Converter
 This is an introduction of how to solve the **CNF converter** problem with C programming.
 
@@ -64,7 +111,7 @@ struct Tree* parseToTree(struct Tree* t){ // close the bracket or demorgan  true
     char ss[MAX_STR];
     int sign=0;
     int prop=0;
-    
+
     scanf("%s",ss);
     //checkSyntax(ss);
     DPrintf(printf("- parseToTree temp=%c, ss=%s\n", temp, ss););
@@ -118,7 +165,7 @@ struct Tree* demorgan(struct Tree* t){
         t->right = demorgan(t->right);
     }
     else if(t->sign == _NOT) t = t->left;
-    
+
     DPrintf(printf("> demorgan tree=%p\n",t););
     return t;
 }
@@ -186,7 +233,7 @@ struct Tree* distribute(struct Tree* t){
 
         return p;
     }
-    
+
     return t;
     DPrintf(printf("> distribute tree=%p\n",t););
 }
@@ -226,12 +273,12 @@ struct Tree* copyTree(struct Tree* t){
 ## Chapter 4. How to run
 > How to build?
 ```
-gcc -o p2_5.out -include tree.h tree.c  
+gcc -o p2_5.out -include tree.h tree.c
 ```
 In the Debug mode, you can see which functions are executed.
 
 ```
-gcc -DDEBUG -o p2_5.out -include tree.h tree.c  
+gcc -DDEBUG -o p2_5.out -include tree.h tree.c
 ```
 > How to execute?
 ```
