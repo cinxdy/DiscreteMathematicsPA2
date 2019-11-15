@@ -41,7 +41,7 @@ void printTree(struct Tree* t);
 // change the node. 
 // if the node is a statement node, change 'and' to 'or', 'or' to 'and', 'not' to 'no not'
 // else if the node is a atomic proposition, change 'a1' to 'a-1'
-struct Tree* doNot(struct Tree* t);
+struct Tree* demorgan(struct Tree* t);
 
 // make the tree to be NNF.
 struct Tree* NNF(struct Tree* t);
@@ -57,7 +57,7 @@ struct Tree* CNF(struct Tree* t);
 struct Tree* copyTree(struct Tree* t);
 
 // delete all nodes of the tree t (all nodes connected to the node t)
-void deleteAll(struct Tree* t);
+void deleteTree(struct Tree* t);
 
 // print the tree with Answer form. (you'd know what I mean)
 void printAnswer(struct Tree*t);

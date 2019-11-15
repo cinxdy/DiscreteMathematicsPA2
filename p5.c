@@ -163,7 +163,7 @@ struct Tree* distribute(struct Tree* t){
         p->right = copyTree(t);
         p->right->right = pp;
 
-        deleteAll(t);
+        deleteTree(t);
     }
     else {
         p = t->left;
@@ -177,7 +177,7 @@ struct Tree* distribute(struct Tree* t){
         p->right = copyTree(t);
         p->right->left = pp;
 
-        deleteAll(t); 
+        deleteTree(t); 
     }
     
     DPrintf(printf("> distribute tree p=%p\n",p););
@@ -219,13 +219,13 @@ struct Tree* copyTree(struct Tree* t){
     return nt;
 }
 
-void deleteAll(struct Tree* t){
+void deleteTree(struct Tree* t){
     DPrintf(printf("< deleteTree tree=%p\n",t););
 
     if(t == NULL) return ;
 
-    deleteAll(t->left);
-    deleteAll(t->right);
+    deleteTree(t->left);
+    deleteTree(t->right);
     free(t);
 
     DPrintf(printf("> copyTree\n"););
