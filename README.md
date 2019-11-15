@@ -273,7 +273,11 @@ struct Tree* copyTree(struct Tree* t){
 ## Chapter 4. How to run
 > How to build?
 ```
-gcc -o p2_5.out -include tree.h tree.c
+make
+```
+or
+```
+gcc -o p2_5.out -I tree.h tree.c
 ```
 In the Debug mode, you can see which functions are executed.
 
